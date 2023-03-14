@@ -10,7 +10,12 @@ class ExampleController extends Controller
 {
     // create a function
     public function homepage() {
-        return '<h1>Homepage!!!</h1><a href="/about">View the about page</a>';
+    // Step 4 - imagine we loaded data from the database
+        $ourName = 'Nadia';
+        $animals = ['Meowsalot', 'Barksalot', 'Purrsloud'];
+
+        // pass in data from DB into the view using an array with keys from an associate array
+        return view('homepage', ['allAnimals' => $animals, 'name' => $ourName, 'catName' => 'Meowsalot']);
     }
 
     public function aboutPage() {
