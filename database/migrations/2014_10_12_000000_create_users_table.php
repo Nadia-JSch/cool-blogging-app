@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            // we can chain on another method called unique to make sure the usernames are unique
+            $table->string('username')->unique();;
+            // add a column to datase -> means access a object's method
+            // call the nulable method to allow the column to be empty
+
+            // 'php artisan migrate:fresh' to delete al tablesand data and reload the table with the above changes
+            // otherwise to make changes without loosing dat you have to create a new migrations file
+            // 'php artisan make:migration add_favorite_color_column' to create it
+            $table->string('avatar')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
