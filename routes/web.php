@@ -32,3 +32,5 @@ Route::get('/about', [ExampleController::class, "aboutPage"]);
 
 // (url, anonymous function to run to run the register method of the UserController class)
 Route::post('/register', [UserController::class, 'register']);
+
+Route::post('/login', [UserController::class, 'login']);

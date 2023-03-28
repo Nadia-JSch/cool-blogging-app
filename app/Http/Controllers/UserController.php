@@ -9,6 +9,20 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     //
+    public function login(Request $request) {
+        $incomingFields = $request->validate([
+            'loginusername' => 'required',
+            'loginpassword' => 'required'
+        ]);
+
+        if (auth()->attempt(['username' => $incomingFields['loginusername'], 'password' => $incomingFields['loginpassword']])) {
+            $request->session()->regenerate();
+            return 'Congrats!';
+        } else {
+            return 'Sorry!';
+        }
+    }
+    
     public function register(Request $request)
     {
         $incomingFields = $request->validate([
@@ -18,7 +32,7 @@ class UserController extends Controller
         ]);
 
         // hash the password
-        $incomingFields['passwords'] = bcrypt($incomingFields['passwords']);
+        $incomingFields['password'] = bcrypt($incomingFields['password']);
 
         // store the data entered
         User::create($incomingFields);
