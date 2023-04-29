@@ -8,6 +8,22 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    // logout 
+    public function logout() {
+        auth()->logout();
+        // return 'You are now logged out';
+        return redirect('/')->with('successMsg', 'You are now logged out');
+    }
+
+    public function showCorrectHomepage() {
+
+        // check if user is logged in
+        if (auth()->check()) {
+            return view('homepage-feed');
+        } else {
+            return view('homepage');
+        }
+    }
     //
     public function login(Request $request) {
         $incomingFields = $request->validate([
@@ -15,11 +31,16 @@ class UserController extends Controller
             'loginpassword' => 'required'
         ]);
 
-        if (auth()->attempt(['username' => $incomingFields['loginusername'], 'password' => $incomingFields['loginpassword']])) {
+        if (auth()->attempt(['username' => $incomingFields['loginusername'], 
+            'password' => $incomingFields['loginpassword']])) {
+
             $request->session()->regenerate();
-            return 'Congrats!';
+            // redirect here with the following message
+            // params are message name and message
+            return redirect('/')->with('successMsg', 'You have successfully logged in.');
         } else {
-            return 'Sorry!';
+            // return 'Sorry!';
+            return redirect('/')->with('failureMsg', 'Invalid login');
         }
     }
     
@@ -34,8 +55,15 @@ class UserController extends Controller
         // hash the password
         $incomingFields['password'] = bcrypt($incomingFields['password']);
 
-        // store the data entered
-        User::create($incomingFields);
-        return 'Hello from register function';
+        // store the data entered in the db
+        $user = User::create($incomingFields);
+
+        // log users in before redirecting them to the home page
+        auth()->login($user);
+
+        // save the new User details in a variable $user
+
+        // return 'Hello from register function';
+        return redirect('/')->with('successMsg', 'Thanks for creating a new account!');
     }
 }

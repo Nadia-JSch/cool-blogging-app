@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExampleController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -15,22 +16,24 @@ use App\Http\Controllers\UserController;
 | "Almost like a table of contents of our entire application"
 */
 
-Route::get('/', [ExampleController::class, "homepage"]);
+// User-related routes
 
+Route::get('/', [UserController::class, "showCorrectHomepage"]);
 // Step 1
 // using the Route class which we required the autoloader to run
 // the :: in PHP is used to call a static method from the route class
 // get method (also POST, DELETE) - request sent to the web browser
 // (submitting a form requires a POST request)
 // the function is run when someone visits this route
-
 // Step 3
 // import ("use") the controller that was created 
 // replace the anonymous function with the one defined in the controller
 // the syntax is [ControllerName::class, "functionName"]
 Route::get('/about', [ExampleController::class, "aboutPage"]);
-
 // (url, anonymous function to run to run the register method of the UserController class)
 Route::post('/register', [UserController::class, 'register']);
-
 Route::post('/login', [UserController::class, 'login']);
+Route::post('/logout', [UserController::class, 'logout']);
+
+// Blog post related routes
+Route::get('create-post', [PostController::class, 'showCreateForm']);
